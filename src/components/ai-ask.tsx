@@ -70,7 +70,7 @@ export default function AiAsk() {
         AI DATA ASSISTANT
       </p>
 
-      <h2 className="mt-1 text-2xl font-semibold">
+      <h2 className="mt-1 text-2xl font-semibold text-slate-900">
         Ask the HDB resale data
       </h2>
 
@@ -119,7 +119,7 @@ export default function AiAsk() {
       )}
 
       {result && (
-        <div className="mt-6 rounded-lg bg-slate-50 p-5">
+        <div className="mt-6 rounded-lg bg-slate-50 p-5 text-slate-900">
           <p className="font-medium text-slate-900">
             {result.answer}
           </p>
@@ -128,7 +128,7 @@ export default function AiAsk() {
             <div className="mt-4 overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b text-left text-slate-500">
+                  <tr className="border-b text-left text-slate-700">
                     <th className="pb-2">Category</th>
                     <th className="pb-2 text-right">Value</th>
                   </tr>
