@@ -224,6 +224,8 @@ export default function DashboardClient({ towns, flatTypes }: Props) {
           </button>
         </section>
 
+        <AiAsk />
+
         {error && (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
             {error}
@@ -366,8 +368,6 @@ export default function DashboardClient({ towns, flatTypes }: Props) {
                 </div>
               </div>
             </section>
-
-            <AiAsk />
           </>
         )}
       </div>
