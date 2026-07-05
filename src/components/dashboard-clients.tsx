@@ -144,7 +144,7 @@ export default function DashboardClient({ towns, flatTypes }: Props) {
           </p>
 
           <h1 className="mt-2 text-3xl font-bold text-slate-900">
-            DataLens <span className="text-blue-600">Full Stack</span>
+            DataLens
           </h1>
 
           <p className="mt-2 max-w-3xl text-slate-600">
