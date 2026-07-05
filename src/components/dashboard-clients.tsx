@@ -153,6 +153,8 @@ export default function DashboardClient({ towns, flatTypes }: Props) {
           </p>
         </div>
 
+        <AiAsk />
+
         <section className="mb-8 rounded-xl border bg-white p-5 shadow-sm">
           <div className="grid gap-4 md:grid-cols-4">
             <label className="text-sm font-medium text-slate-700">
@@ -223,8 +225,6 @@ export default function DashboardClient({ towns, flatTypes }: Props) {
             Reset filters
           </button>
         </section>
-
-        <AiAsk />
 
         {error && (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">

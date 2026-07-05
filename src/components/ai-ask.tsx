@@ -65,7 +65,7 @@ export default function AiAsk() {
   }
 
   return (
-    <section className="mt-8 rounded-xl border bg-white p-6 shadow-sm">
+    <section className="mt-8 rounded-xl border border-blue-100 bg-blue-50 p-6 shadow-sm">
       <p className="text-sm font-medium text-blue-600">
         AI DATA ASSISTANT
       </p>
