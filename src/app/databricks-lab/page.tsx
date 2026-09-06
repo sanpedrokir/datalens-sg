@@ -27,11 +27,27 @@ export default function DatabricksLabPage() {
 
           <p className="mt-2 max-w-2xl text-slate-600">
             A sandbox page for trying out Databricks (free tier) alongside the
-            main Neon-backed dashboard. It loads HDB resale data and URA
-            private residential transactions as Delta tables and answers
-            plain-English questions the same way the main AI assistant does —
-            just pointed at Databricks instead of Postgres.
+            main Neon-backed dashboard. It loads HDB resale data, URA private
+            residential transactions, and URA report text as Delta
+            tables/Volumes, and answers plain-English questions the same way
+            the main AI assistant does — just pointed at Databricks instead of
+            Postgres.
           </p>
+
+          <div className="mt-4 max-w-2xl rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+            <p className="font-medium">
+              ⚠ This lab runs on Databricks Free Edition, which has no
+              internet access.
+            </p>
+            <p className="mt-1 text-amber-800">
+              Free Edition&apos;s compute can&apos;t call external APIs
+              directly, so all data here is fetched and pre-loaded ahead of
+              time rather than live. Answers only cover whatever&apos;s
+              already been ingested — they won&apos;t reflect anything more
+              recent, and a market with no table loaded yet will return a
+              &quot;table not found&quot; error rather than fresh data.
+            </p>
+          </div>
         </div>
 
         <DatabricksAsk />
