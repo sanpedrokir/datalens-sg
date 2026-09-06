@@ -15,10 +15,12 @@ const tableByMarket = {
   private: `${catalog}.${schema}.ura_private_transactions`,
 };
 
+const reportsTable = `${catalog}.${schema}.ura_reports`;
+
 export const databricksPlanSchema = z.object({
   intent: z.enum(["query", "unsupported"]),
 
-  market: z.enum(["hdb", "private"]),
+  market: z.enum(["hdb", "private", "reports"]),
 
   metric: z.enum([
     "median_price",
@@ -38,6 +40,11 @@ export const databricksPlanSchema = z.object({
   order: z.enum(["asc", "desc"]),
   limit: z.number().int().min(1).max(24),
 
+  // Only used when market is "reports": short literal phrases likely to
+  // appear verbatim in URA report text (this is a keyword LIKE search,
+  // not semantic search).
+  reportKeywords: z.array(z.string().max(60)).max(5).nullable(),
+
   unsupportedReason: z.string().nullable(),
 });
 
@@ -48,7 +55,7 @@ export const databricksPlanJsonSchema = {
   additionalProperties: false,
   properties: {
     intent: { type: "string", enum: ["query", "unsupported"] },
-    market: { type: "string", enum: ["hdb", "private"] },
+    market: { type: "string", enum: ["hdb", "private", "reports"] },
     metric: {
       type: "string",
       enum: [
@@ -78,6 +85,12 @@ export const databricksPlanJsonSchema = {
     propertyType: { anyOf: [{ type: "string" }, { type: "null" }] },
     order: { type: "string", enum: ["asc", "desc"] },
     limit: { type: "integer", minimum: 1, maximum: 24 },
+    reportKeywords: {
+      anyOf: [
+        { type: "array", items: { type: "string" }, maxItems: 5 },
+        { type: "null" },
+      ],
+    },
     unsupportedReason: { anyOf: [{ type: "string" }, { type: "null" }] },
   },
   required: [
@@ -91,6 +104,7 @@ export const databricksPlanJsonSchema = {
     "propertyType",
     "order",
     "limit",
+    "reportKeywords",
     "unsupportedReason",
   ],
 };
@@ -120,6 +134,12 @@ function monthToDate(value: string | null) {
 }
 
 export async function runSafeDatabricksQuery(plan: DatabricksPlan) {
+  if (plan.market === "reports") {
+    throw new Error(
+      "runSafeDatabricksQuery does not support market 'reports' — use runReportsSearch instead."
+    );
+  }
+
   const table = tableByMarket[plan.market];
   const selectedMetric = metricSql[plan.metric];
   const selectedGroup = groupSql[plan.groupBy];
@@ -159,6 +179,42 @@ export async function runSafeDatabricksQuery(plan: DatabricksPlan) {
     label: String(row.label),
     value: Number(row.value ?? 0),
   }));
+}
+
+export async function runReportsSearch(keywords: string[]) {
+  if (keywords.length === 0) return [];
+
+  const conditions = keywords.map(() => "lower(text) LIKE lower(?)").join(" OR ");
+  const params = keywords.map((k) => `%${k}%`);
+
+  const rows = await runDatabricksQuery(
+    `
+      SELECT filename, page, text
+      FROM ${reportsTable}
+      WHERE ${conditions}
+      LIMIT 3
+    `,
+    params
+  );
+
+  return rows.map((row) => ({
+    filename: String(row.filename),
+    page: Number(row.page),
+    text: String(row.text),
+  }));
+}
+
+export function buildReportsAnswer(
+  keywords: string[],
+  matches: { filename: string; page: number; text: string }[]
+) {
+  if (matches.length === 0) {
+    return `No URA report content matched "${keywords.join(", ")}". Try different keywords, or ask about HDB/URA transaction data instead.`;
+  }
+
+  return matches
+    .map((m) => `From ${m.filename} (page ${m.page}): ${m.text}`)
+    .join("\n\n");
 }
 
 const currency = new Intl.NumberFormat("en-SG", {

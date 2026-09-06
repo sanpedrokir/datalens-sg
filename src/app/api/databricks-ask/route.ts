@@ -2,8 +2,10 @@ import OpenAI from "openai";
 import { NextResponse } from "next/server";
 import {
   buildDatabricksAnswer,
+  buildReportsAnswer,
   databricksPlanJsonSchema,
   databricksPlanSchema,
+  runReportsSearch,
   runSafeDatabricksQuery,
 } from "@/lib/databricks-query";
 import { databricksConfigured } from "@/lib/databricks-ds";
@@ -46,21 +48,32 @@ export async function POST(request: Request) {
 
       instructions: `
 You convert plain-English questions into a query plan for a Databricks lab
-that holds two Singapore property datasets, ingested as Delta tables:
+that holds three Singapore property datasets, ingested as Delta tables:
 
 - market "hdb": public HDB resale flat transactions
   (property_type examples: 3 ROOM, 4 ROOM, 5 ROOM, EXECUTIVE)
 - market "private": URA private residential transactions
   (property_type examples: Condominium, Apartment, Executive Condominium)
+- market "reports": extracted text from URA's Q1 2026 market report PDFs
+  (price index, rental index, unsold units, transaction volumes, and a
+  narrative market/economic outlook summary)
 
-Both tables share columns: month, area, property_type, floor_area_sqm, price.
-"area" is the HDB town (e.g. ANG MO KIO, TAMPINES) for market "hdb", and the
-URA district/planning area code for market "private".
+The "hdb" and "private" tables share columns: month, area, property_type,
+floor_area_sqm, price. "area" is the HDB town (e.g. ANG MO KIO, TAMPINES) for
+market "hdb", and the URA district/planning area code for market "private".
 
 Rules:
 - Never write SQL.
 - Pick market "hdb" for HDB/resale-flat questions, "private" for condo/private
-  residential/URA questions. If truly ambiguous, default to "hdb".
+  residential transaction questions, and "reports" for questions about market
+  commentary, outlook, sentiment, vacancy rates, or narrative summaries (things
+  a written report would say, not a transaction-level number). If truly
+  ambiguous, default to "hdb".
+- For market "reports": set reportKeywords to 1-3 short literal phrases (e.g.
+  "vacancy", "office", "outlook", "rental index") likely to appear verbatim in
+  the report text — this is a literal keyword search, not semantic search.
+  Leave metric/groupBy/area/propertyType as their default values; they're
+  ignored for this market.
 - Convert "4-room" into "4 ROOM". Convert HDB town names to uppercase.
 - Use YYYY-MM for from/to. Use null for filters not mentioned.
 - For "highest" use order desc, for "lowest" use order asc.
@@ -88,6 +101,17 @@ Rules:
     if (plan.intent === "unsupported") {
       return NextResponse.json({
         answer: buildDatabricksAnswer(plan, []),
+        plan,
+        rows: [],
+      });
+    }
+
+    if (plan.market === "reports") {
+      const keywords = plan.reportKeywords || [];
+      const matches = await runReportsSearch(keywords);
+
+      return NextResponse.json({
+        answer: buildReportsAnswer(keywords, matches),
         plan,
         rows: [],
       });

@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 
 type Answer = {
   answer: string;
-  plan: { market: "hdb" | "private" };
+  plan: { market: "hdb" | "private" | "reports" };
   rows: { label: string; value: number }[];
 };
 
@@ -18,7 +18,8 @@ const examples = [
   "What is the median HDB resale price by town in 2024?",
   "Compare average price per sqm for 4-room flats vs condominiums in 2024.",
   "Which URA district had the highest average private residential price in 2024?",
-  "How many private residential transactions were recorded in 2023?",
+  "What does the URA report say about office vacancy?",
+  "What's the market outlook according to the URA report?",
 ];
 
 export default function DatabricksAsk() {
@@ -116,10 +117,17 @@ export default function DatabricksAsk() {
       {result && (
         <div className="mt-6 rounded-lg bg-slate-50 p-5 text-slate-900">
           <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-            Source: {result.plan.market === "hdb" ? "HDB resale (hdb_resale)" : "URA private residential (ura_private_transactions)"}
+            Source:{" "}
+            {result.plan.market === "hdb"
+              ? "HDB resale (hdb_resale)"
+              : result.plan.market === "private"
+              ? "URA private residential (ura_private_transactions)"
+              : "URA report text, keyword search (ura_reports)"}
           </p>
 
-          <p className="mt-1 font-medium text-slate-900">{result.answer}</p>
+          <p className="mt-1 whitespace-pre-line font-medium text-slate-900">
+            {result.answer}
+          </p>
 
           {result.rows.length > 0 && (
             <div className="mt-4 overflow-x-auto">
