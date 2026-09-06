@@ -212,9 +212,19 @@ export function buildReportsAnswer(
     return `No URA report content matched "${keywords.join(", ")}". Try different keywords, or ask about HDB/URA transaction data instead.`;
   }
 
-  return matches
-    .map((m) => `From ${m.filename} (page ${m.page}): ${m.text}`)
-    .join("\n\n");
+  const passage = matches.length === 1 ? "passage" : "passages";
+  return `Found ${matches.length} matching ${passage} for "${keywords.join(", ")}":`;
+}
+
+// The source text was flattened to one line per row to survive the
+// Databricks "Create or modify table" CSV upload wizard (it splits on any
+// literal newline in a quoted field). Split back into sentence-like chunks
+// here purely for display.
+export function splitReportTextIntoSentences(text: string) {
+  return text
+    .split(/(?<=[.!?])\s+(?=[A-Z0-9])/)
+    .map((s) => s.trim())
+    .filter(Boolean);
 }
 
 const currency = new Intl.NumberFormat("en-SG", {

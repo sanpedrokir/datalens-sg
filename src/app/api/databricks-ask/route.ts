@@ -7,6 +7,7 @@ import {
   databricksPlanSchema,
   runReportsSearch,
   runSafeDatabricksQuery,
+  splitReportTextIntoSentences,
 } from "@/lib/databricks-query";
 import { databricksConfigured } from "@/lib/databricks-ds";
 
@@ -114,6 +115,11 @@ Rules:
         answer: buildReportsAnswer(keywords, matches),
         plan,
         rows: [],
+        reportMatches: matches.map((m) => ({
+          filename: m.filename,
+          page: m.page,
+          sentences: splitReportTextIntoSentences(m.text),
+        })),
       });
     }
 

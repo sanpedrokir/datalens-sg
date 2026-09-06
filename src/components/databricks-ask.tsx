@@ -6,6 +6,7 @@ type Answer = {
   answer: string;
   plan: { market: "hdb" | "private" | "reports" };
   rows: { label: string; value: number }[];
+  reportMatches?: { filename: string; page: number; sentences: string[] }[];
 };
 
 const currency = new Intl.NumberFormat("en-SG", {
@@ -125,9 +126,28 @@ export default function DatabricksAsk() {
               : "URA report text, keyword search (ura_reports)"}
           </p>
 
-          <p className="mt-1 whitespace-pre-line font-medium text-slate-900">
-            {result.answer}
-          </p>
+          <p className="mt-1 font-medium text-slate-900">{result.answer}</p>
+
+          {result.reportMatches && result.reportMatches.length > 0 && (
+            <div className="mt-4 space-y-3">
+              {result.reportMatches.map((match, i) => (
+                <div
+                  key={`${match.filename}-${match.page}-${i}`}
+                  className="rounded-lg border bg-white p-4"
+                >
+                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                    {match.filename} — page {match.page}
+                  </p>
+
+                  <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-800">
+                    {match.sentences.map((sentence, j) => (
+                      <li key={j}>{sentence}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          )}
 
           {result.rows.length > 0 && (
             <div className="mt-4 overflow-x-auto">
