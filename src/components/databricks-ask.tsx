@@ -19,6 +19,7 @@ const examples = [
   "What is the median HDB resale price by town in 2024?",
   "Compare average price per sqm for 4-room flats vs condominiums in 2024.",
   "Which URA district had the highest average private residential price in 2024?",
+  "What happened to private residential prices in 2026?",
   "What does the URA report say about office vacancy?",
   "What's the market outlook according to the URA report?",
 ];

@@ -34,12 +34,13 @@ export default function DatabricksLabPage() {
             Postgres.
           </p>
 
-          <div className="mt-4 max-w-2xl rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-            <p className="font-medium">
-              ⚠ This lab runs on Databricks Free Edition, which has no
-              internet access.
+          <div className="mt-4 max-w-2xl rounded-lg border-2 border-red-400 bg-red-50 p-5 shadow-sm">
+            <p className="flex items-center gap-2 text-lg font-bold text-red-800">
+              <span className="text-2xl">⚠️</span>
+              This lab runs on Databricks Free Edition, which has NO internet
+              access.
             </p>
-            <p className="mt-1 text-amber-800">
+            <p className="mt-2 text-sm font-medium text-red-900">
               Free Edition&apos;s compute can&apos;t call external APIs
               directly, so all data here is fetched and pre-loaded ahead of
               time rather than live. Answers only cover whatever&apos;s
