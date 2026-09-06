@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import {
   Bar,
@@ -138,19 +139,28 @@ export default function DashboardClient({ towns, flatTypes }: Props) {
   return (
     <main className="min-h-screen bg-slate-50 p-6 md:p-10">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8">
-          <p className="text-sm font-medium text-blue-600">
-            DATA ANALYTICS PLATFORM
-          </p>
+        <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="text-sm font-medium text-blue-600">
+              DATA ANALYTICS PLATFORM
+            </p>
 
-          <h1 className="mt-2 text-3xl font-bold text-slate-900">
-            DataLens
-          </h1>
+            <h1 className="mt-2 text-3xl font-bold text-slate-900">
+              DataLens
+            </h1>
 
-          <p className="mt-2 max-w-3xl text-slate-600">
-            Explore HDB resale transactions, compare towns and flat types,
-            and ask questions in plain English.
-          </p>
+            <p className="mt-2 max-w-3xl text-slate-600">
+              Explore HDB resale transactions, compare towns and flat types,
+              and ask questions in plain English.
+            </p>
+          </div>
+
+          <Link
+            href="/databricks-lab"
+            className="shrink-0 rounded-md border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-700 hover:bg-orange-100"
+          >
+            Try the Databricks Lab →
+          </Link>
         </div>
 
         <AiAsk />
