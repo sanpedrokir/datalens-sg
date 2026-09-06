@@ -49,6 +49,26 @@ export default function DatabricksLabPage() {
               &quot;table not found&quot; error rather than fresh data.
             </p>
           </div>
+
+          <div className="mt-4 max-w-2xl rounded-lg border-2 border-emerald-400 bg-emerald-50 p-5 shadow-sm">
+            <p className="flex items-center gap-2 text-lg font-bold text-emerald-800">
+              <span className="text-2xl">✅</span>
+              New: query unstructured data — real URA report PDFs
+            </p>
+            <p className="mt-2 text-sm font-medium text-emerald-900">
+              Beyond the structured HDB/URA transaction tables, this lab now
+              does keyword search over text extracted from real URA Q1 2026
+              market report PDFs (stored as raw files in a Databricks Volume,
+              plus a searchable text table). Try asking:
+            </p>
+            <ul className="mt-2 list-disc space-y-1 pl-6 text-sm text-emerald-900">
+              <li>&quot;What does the URA report say about office vacancy?&quot;</li>
+              <li>&quot;What&apos;s the market outlook according to the URA report?&quot;</li>
+              <li>&quot;What happened to private residential prices in 2026?&quot;</li>
+              <li>&quot;What does the URA report say about unsold units?&quot;</li>
+              <li>&quot;How many residential units are expected to complete, according to the report?&quot;</li>
+            </ul>
+          </div>
         </div>
 
         <DatabricksAsk />
