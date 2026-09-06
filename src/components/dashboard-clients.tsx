@@ -157,7 +157,7 @@ export default function DashboardClient({ towns, flatTypes }: Props) {
 
           <Link
             href="/databricks-lab"
-            className="shrink-0 rounded-md border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-medium text-orange-700 hover:bg-orange-100"
+            className="shrink-0 self-center rounded-lg bg-orange-600 px-6 py-3 text-base font-semibold text-white shadow-md transition hover:bg-orange-700 hover:shadow-lg"
           >
             Try the Databricks Lab →
           </Link>
