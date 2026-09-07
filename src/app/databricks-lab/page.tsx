@@ -26,12 +26,9 @@ export default function DatabricksLabPage() {
           </h1>
 
           <p className="mt-2 max-w-2xl text-slate-600">
-            A sandbox page for trying out Databricks (free tier) alongside the
-            main Neon-backed dashboard. It loads HDB resale data, URA private
-            residential transactions, and URA report text as Delta
-            tables/Volumes, and answers plain-English questions the same way
-            the main AI assistant does — just pointed at Databricks instead of
-            Postgres.
+            Loads HDB resale data, URA private residential transactions, and
+            URA report text as Delta tables/Volumes, and answers plain-English
+            questions the same way the main AI assistant does
           </p>
 
           <div className="mt-4 max-w-2xl rounded-lg border-2 border-red-400 bg-red-50 p-5 shadow-sm">

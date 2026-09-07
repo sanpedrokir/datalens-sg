@@ -159,7 +159,7 @@ export default function DashboardClient({ towns, flatTypes }: Props) {
             href="/databricks-lab"
             className="shrink-0 self-center rounded-lg bg-orange-600 px-6 py-3 text-base font-semibold text-white shadow-md transition hover:bg-orange-700 hover:shadow-lg"
           >
-            Try the Databricks Lab →
+            NLP Query via Databricks →
           </Link>
         </div>
 
